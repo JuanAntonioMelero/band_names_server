@@ -1,28 +1,41 @@
 const express = require('express');
 const path = require('path');
+const { Server } = require("socket.io");
+
 require('dotenv').config();
 
-//app de express
-const app=express();
+// App de Express
+const app = express();
 
-// Servidor Node
+// Node Server
 const server = require('http').createServer(app);
-//inicializamos el servidor socket 
-//const io = require('socket.io')(server);
+module.exports.io = new Server(server, {
+          cors: {
+            //direcciones especificas
+            //origin: ["http://localhost:4200", "http://localhost:63621"],
+             //cualquier direccion
+             origin: '*',
+            methods: ["GET", "POST"]
+          }
+        });
 
-//inicializamos y exportamos el servidor socket
-module.exports.io = require('socket.io')(server);
-require('./sockets/socket'); 
+
+require('./sockets/socket');
 
 
-//Path Publico
-const publicPath= path.resolve(__dirname,'public')
-app.use(express.static(publicPath));
 
-//Cambiamos app por server
-//app.listen(process.env.PORT, (error)=>{
-server.listen(process.env.PORT, (error)=>{
-    if (error) throw new Error(error);
 
-    console.log('Servidor Corriendo en el puerto:',process.env.PORT);
+// Path público
+const publicPath = path.resolve( __dirname, 'public' );
+app.use( express.static( publicPath ) );
+
+
+server.listen( process.env.PORT, ( err ) => {
+
+    if ( err ) throw new Error(err);
+
+    console.log('Servidor corriendo en puerto', process.env.PORT );
+
 });
+
+

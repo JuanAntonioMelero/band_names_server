@@ -1,7 +1,6 @@
 //importamos el servidor de sockets
 const {io} = require('../index');
 
-
 //Menajes de Sockets
 io.on('connection', client => {
     console.log('Cliente conectado');
