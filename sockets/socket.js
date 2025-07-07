@@ -16,4 +16,11 @@ io.on('connection', client => {
 //con client solo al especifico que ha recibido el emit
     //    client.emit( 'mensaje', { admin: 'Nuevo mensaje para '+payload.nombre } );
     });
+
+ client.on('emitir-mensaje', ( payload ) => {
+       console.log(payload);
+        io.emit( 'nuevo-mensaje', {nombre:'Fernando', mensaje:'Mensaje de Fernando'} );// con io.emit envia a todos los usuarios
+      // client.broadcast.emit( 'nuevo-mensaje', 'HEY!!!' );// envia a todos menos al que ha realizado la emision de nuevo mensaje
+    });
+
 });
