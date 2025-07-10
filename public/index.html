@@ -28,6 +28,18 @@
             console.log('Escuhando:', payload );
             
         });
+        socket.on('bandas activas', function( bandas ){
+            console.clear;
+            console.table( bandas );
+            
+        });
+  socket.on('add-band', function( payload ){
+            console.log('Escuhando:', payload );
+            
+        });
+
+
+
          socket.on('nuevo-mensaje', function( payload ){
             console.log('Escuhando:', payload );
             
