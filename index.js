@@ -3,9 +3,14 @@ const path = require('path');
 const { Server } = require("socket.io");
 
 require('dotenv').config();
-
+//DB config
+const {dbConecction} = require('./database/config');
+dbConecction();
 // App de Express
 const app = express();
+
+// Lectura y parseo del body
+app.use(express.json());
 
 // Node Server
 const server = require('http').createServer(app);
@@ -28,6 +33,10 @@ require('./sockets/socket');
 // Path público
 const publicPath = path.resolve( __dirname, 'public' );
 app.use( express.static( publicPath ) );
+
+//Mis Rutas
+app.use('/api/login', require('./routes/auth'));
+
 
 
 server.listen( process.env.PORT, ( err ) => {
