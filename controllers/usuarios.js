@@ -1,9 +1,9 @@
 const { response } = require('express');
 const Usuario = require('../models/usuario');
 
-const getUsuarios = async ( req, res = response ) => {
+const getUsuarios = async (req, res = response) => {
 
-    const desde = Number( req.query.desde ) || 0;
+    const desde = Number(req.query.desde) || 0;
 
     const usuarios = await Usuario
         .find({ _id: { $ne: req.uid } })
@@ -11,7 +11,7 @@ const getUsuarios = async ( req, res = response ) => {
         .skip(desde)
         .limit(20)
 
-    
+
     res.json({
         ok: true,
         usuarios,
@@ -19,7 +19,7 @@ const getUsuarios = async ( req, res = response ) => {
 }
 
 // Actualizar usuario
-const actualizarUsuario = async ( req, res = response ) => {
+const actualizarUsuario = async (req, res = response) => {
     try {
         const uid = req.params.id;
         const { nombre, email, role } = req.body;
@@ -72,7 +72,7 @@ const actualizarUsuario = async ( req, res = response ) => {
 }
 
 // Eliminar usuario
-const eliminarUsuario = async ( req, res = response ) => {
+const eliminarUsuario = async (req, res = response) => {
     try {
         const uid = req.params.id;
 
@@ -110,8 +110,52 @@ const eliminarUsuario = async ( req, res = response ) => {
     }
 }
 
+const crearUsuario = async (req, res = response) => {
+    const { email, password, nombre, role } = req.body;
+
+    try {
+        // Verificar si el email ya existe
+        const existeEmail = await Usuario.findOne({ email });
+        if (existeEmail) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'El email ya está registrado'
+            });
+        }
+
+        // Crear nuevo usuario
+        const usuario = new Usuario({ nombre, email, password, role });
+
+        // Encriptar contraseña
+        const salt = bcrypt.genSaltSync();
+        usuario.password = bcrypt.hashSync(password, salt);
+
+        // Guardar usuario
+        await usuario.save();
+
+        res.json({
+            ok: true,
+            msg: 'Usuario creado correctamente',
+            usuario: {
+                uid: usuario._id,
+                nombre: usuario.nombre,
+                email: usuario.email,
+                role: usuario.role
+            }
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error interno del servidor'
+        });
+    }
+};
+
 module.exports = {
     getUsuarios,
+    crearUsuario,
     actualizarUsuario,
     eliminarUsuario
 }
