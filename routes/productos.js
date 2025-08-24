@@ -29,8 +29,8 @@ router.post('/', [
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('precio', 'El precio es obligatorio y debe ser un número').isNumeric(),
     check('categoria', 'La categoría es obligatoria').not().isEmpty(),
-    check('stock', 'El stock debe ser un número').optional().isNumeric(),
-    check('codigo', 'El código es obligatorio').not().isEmpty(),
+    check('areapreparacion', 'El área de preparación es obligatoria').not().isEmpty(),
+    check('imagen', 'La imagen debe ser una URL válida').optional().isURL(),
     validarCampos
 ], crearProducto);
 
@@ -40,8 +40,8 @@ router.put('/:id', [
     check('nombre', 'El nombre es obligatorio').optional().not().isEmpty(),
     check('precio', 'El precio debe ser un número').optional().isNumeric(),
     check('categoria', 'La categoría es obligatoria').optional().not().isEmpty(),
-    check('stock', 'El stock debe ser un número').optional().isNumeric(),
-    check('codigo', 'El código es obligatorio').optional().not().isEmpty(),
+    check('areapreparacion', 'El área de preparación es obligatoria').optional().not().isEmpty(),
+    check('imagen', 'La imagen debe ser una URL válida').optional().isURL(),
     validarCampos
 ], actualizarProducto);
 
