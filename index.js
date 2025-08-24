@@ -38,6 +38,7 @@ app.use(express.static(publicPath));
 app.use('/api/login', require('./routes/auth'));
 app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/productos', require('./routes/productos'));
+app.use('/api/categorias', require('./routes/categorias'));
 
 
 
