@@ -62,25 +62,23 @@ const getProducto = async (req, res = response) => {
 
 const crearProducto = async (req, res = response) => {
     try {
-        const { nombre, descripcion, precio, categoria, stock, codigo } = req.body;
+        const { nombre, precio, areapreparacion, categoria, imagen } = req.body;
 
-        // Verificar si el código ya existe
-        const existeCodigo = await Producto.findOne({ codigo });
-        if (existeCodigo) {
+        // Validar campos obligatorios
+        if (!nombre || !precio || !areapreparacion || !categoria) {
             return res.status(400).json({
                 ok: false,
-                msg: 'El código del producto ya existe'
+                msg: 'Los campos nombre, precio, área de preparación y categoría son obligatorios'
             });
         }
 
         // Crear producto
         const producto = new Producto({
             nombre,
-            descripcion,
             precio,
+            areapreparacion,
             categoria,
-            stock,
-            codigo
+            imagen: imagen || null
         });
 
         await producto.save();
@@ -102,7 +100,7 @@ const crearProducto = async (req, res = response) => {
 const actualizarProducto = async (req, res = response) => {
     try {
         const uid = req.params.id;
-        const { nombre, descripcion, precio, categoria, stock, codigo, activo } = req.body;
+        const { nombre, precio, areapreparacion, categoria, imagen, activo } = req.body;
 
         // Verificar si el producto existe
         const producto = await Producto.findById(uid);
@@ -113,21 +111,10 @@ const actualizarProducto = async (req, res = response) => {
             });
         }
 
-        // Verificar si el código ya existe en otro producto
-        if (codigo && codigo !== producto.codigo) {
-            const existeCodigo = await Producto.findOne({ codigo });
-            if (existeCodigo) {
-                return res.status(400).json({
-                    ok: false,
-                    msg: 'El código del producto ya existe'
-                });
-            }
-        }
-
         // Actualizar producto
         const productoActualizado = await Producto.findByIdAndUpdate(
             uid,
-            { nombre, descripcion, precio, categoria, stock, codigo, activo },
+            { nombre, precio, areapreparacion, categoria, imagen, activo },
             { new: true }
         );
 
