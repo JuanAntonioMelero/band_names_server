@@ -5,30 +5,27 @@ const ProductoSchema = Schema(
         nombre: {
             type: String,
             required: true,
-        },
-        descripcion: {
-            type: String,
-            required: false,
+            trim: true
         },
         precio: {
             type: Number,
             required: true,
             min: 0
         },
+        areapreparacion: {
+            type: String,
+            required: true,
+            trim: true
+        },
         categoria: {
             type: String,
             required: true,
+            trim: true
         },
-        stock: {
-            type: Number,
-            required: true,
-            min: 0,
-            default: 0
-        },
-        codigo: {
+        imagen: {
             type: String,
-            required: true,
-            unique: true
+            required: false,
+            trim: true
         },
         activo: {
             type: Boolean,
@@ -51,7 +48,6 @@ ProductoSchema.method('toJSON', function () {
     return object;
 });
 
-// Middleware para actualizar fechaActualizacion antes de guardar
 ProductoSchema.pre('findOneAndUpdate', function() {
     this.set({ fechaActualizacion: new Date() });
 });
